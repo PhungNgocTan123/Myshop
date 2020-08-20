@@ -10,3 +10,7 @@
 1. [x] express , mongoose, body-parser
 
 2. [x] Connnect database
+
+3. [x] Client Setup 
+
+4. [x] Making components: AppNavbar 
