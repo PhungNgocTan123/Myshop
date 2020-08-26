@@ -13,4 +13,16 @@
 
 3. [x] Client Setup 
 
-4. [x] Making components: AppNavbar 
+4. [x] Making components: AppNavbar
+
+## reducer
+- userLoaded        []
+- authError         []
+- loginSuccess      [] 
+- loginFail         []
+- logOutSucces      []
+- logOutFail        []
+- registerSuccess   []
+- registerFail      []
+- getError          []
+- clearError        []

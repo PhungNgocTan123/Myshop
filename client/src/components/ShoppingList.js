@@ -1,52 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Container, Button, ListGroup, ListGroupItem } from 'reactstrap';
 import { v1 as uuid } from "uuid";
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItems, itemsLoading, getItems } from '../redux/shoppingSlice';
 
 ShoppingList.propTypes = {};
 
 function ShoppingList(props) {
 
-    const [items, setItems] = useState([
-        { id: uuid(), name: 'Eggs' },
-        { id: uuid(), name: 'Milk' },
-        { id: uuid(), name: 'Steak' },
-        { id: uuid(), name: 'Water' }
-    ])
+    const dispatch = useDispatch();
+    const items = useSelector(state => state.items.items);
+    console.log(items);
 
+    // Get Items
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                axios
+                    .get('/api/items')
+                    .then(res =>
+                        dispatch(getItems(res.data))
+                    )
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        fetchData();
+    }, [getItems])
+
+    // Delete items
+    const handleDelete = (item) => {
+        const removeItem = item;
+        console.log(removeItem)
+        axios
+            .delete(`/api/items/${item}`)
+            .then(res => dispatch(removeItems(removeItem)))
+            .catch(e => console.log(e))
+    }
     return (
         <Container>
-            <Button
-                color="dark"
-                style={{ marginBottom: '2rem' }}
-                onClick={() => {
-                    const name = prompt('Enter Item');
-                    if (name) {
-                        const newItems = [...items];
-                        newItems.push({ id: uuid(), name });
-                        setItems(newItems)
-                    }
-                }}
-            >
-                Add Item
-            </Button>
-
             <ListGroup>
-                <TransitionGroup>
-                    {items.map(({ id, name }) => (
-                        <CSSTransition key={id} timeout={500} classNames="fade">
+                <TransitionGroup >
+                    {items.map((item) => (
+                        <CSSTransition key={item._id} timeout={500} classNames="fade">
                             <ListGroupItem>
                                 <Button
                                     className="remove-btn"
                                     color="danger"
                                     size="sm"
-                                    onClick={() => {
-                                        const newItems = items.filter(item => item.id !== id)
-                                        setItems(newItems);
-                                    }}
-                                >&times;</Button>
-                                {name}
+                                    onClick={() => handleDelete(item._id)}
+                                >&times;
+                                </Button>
+                                {item.name}
                             </ListGroupItem>
                         </CSSTransition>
                     ))}

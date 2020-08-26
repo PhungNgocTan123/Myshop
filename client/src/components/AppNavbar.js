@@ -1,5 +1,6 @@
 import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
+import RegisterModel from './auth/RegisterModel';
 
 import {
     Collapse,
@@ -32,9 +33,7 @@ function AppNavbar(props) {
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="ml-auto">
                             <NavItem>
-                                <NavLink href="https://github.com/PhungNgocTan123">
-                                    Github
-                            </NavLink>
+                                <RegisterModel />
                             </NavItem>
                         </Nav>
                     </Collapse>
